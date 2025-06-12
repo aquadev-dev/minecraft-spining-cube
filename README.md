@@ -17,3 +17,15 @@
  <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/visualstudio/visualstudio-original.svg" height=50 width=50>
 </div>
 
+<h2>Features</h2>
+<ul>
+  <li>Mesh representations</li>
+  <li>Geometric Transformation</li>
+  <li>Texturing</li>
+  <li>Material and local illumination</li>
+  <li>Camera Control</li>
+  <li>Model Loading</li>
+  <li>Shader-driven effects</li>
+  <li>Dynamc events and interactive control</li>
+  <li>Customised object-orientated program structure</li>
+</ul>
