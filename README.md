@@ -9,5 +9,11 @@
 
 <h2>Languages and modules used</h2>
 <div align="start">
-  <img src="">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/cplusplus/cplusplus-original.svg" height=50 width=50>
 </div>
+
+<h2>Tools Used</h2>
+<div>
+ <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/visualstudio/visualstudio-original.svg" height=50 width=50>
+</div>
+
