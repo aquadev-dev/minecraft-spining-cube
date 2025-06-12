@@ -1,0 +1,78 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: light.ps
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Tutor Notes:
+// 1. Ambient lighting is a lighting that effects all parts of an area. You can imagine it as light rays bouncing around a room and illuminating parts of the room
+// 2. To apply ambient light we use the pixel shader and every pixel gets an amount of ambient light so nothing is in total darkness. 
+////////////////////////////////////////////////////////////////////////////////
+
+/////////////
+// GLOBALS //
+/////////////
+Texture2D shaderTexture : register(t0);
+SamplerState SampleType : register(s0);
+
+cbuffer LightBuffer
+{
+	float4 ambientColor; //We have an ambient colour that is provided that will impact every pixel. 
+    float4 diffuseColor;
+    float3 lightDirection;
+	float padding;
+};
+
+
+//////////////
+// TYPEDEFS //
+//////////////
+struct PixelInputType
+{
+    float4 position : SV_POSITION;
+    float2 tex : TEXCOORD0;
+	float3 normal : NORMAL;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Pixel Shader
+////////////////////////////////////////////////////////////////////////////////
+float4 LightPixelShader(PixelInputType input) : SV_TARGET
+{
+	float4 textureColor;
+	float3 lightDir;
+	float lightIntensity;
+	float4 color;
+
+
+	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
+	textureColor = shaderTexture.Sample(SampleType, input.tex);
+
+	// Set the default output color to the ambient light value for all pixels.
+    // This is done so that even pixels that aren't hit by a light directly take some modifier from the ambient lighting.
+    // Any pixel rendered with this shader will at LEAST have this colour, even if it has no actual lighting from diffuse lighting
+
+    color = ambientColor;
+
+	// Invert the light direction for calculations.
+    lightDir = -lightDirection;
+
+    // Calculate the amount of light on this pixel.
+    lightIntensity = saturate(dot(input.normal, lightDir));
+
+    //If the dot product if greater than 0 then the pixel has been hit by the diffuse light. If not we don't any any positive or negative diffuse light in our pixel calculations. 
+	if(lightIntensity > 0.0f)
+    {
+        // Determine the final diffuse color based on the diffuse color and the amount of light intensity. (For pixels that are hit by the diffuse lighting)
+        color += (diffuseColor * lightIntensity);
+    }
+
+    // Saturate the final light color. Regardless of if the diffuse light is hitting or not we need to clamp between 0 and 1
+    color = saturate(color);
+
+    // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
+	color = color * textureColor;
+
+	return color;
+}
